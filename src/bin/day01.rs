@@ -13,23 +13,19 @@ fn main() -> Result<()> {
 fn increases(input: Vec<i64>) -> usize {
     input
         .into_iter()
-        .fold((0, -1), |(cnt, prev), i| {
-            (if i > prev { cnt + 1 } else { cnt }, i)
-        })
-        .0
-        - 1
+        .tuple_windows()
+        .filter(|(a, b)| a < b)
+        .count()
 }
 
 fn window(input: Vec<i64>) -> usize {
-    input
-        .into_iter()
-        .tuple_windows()
-        .map(|(a, b, c)| a + b + c)
-        .fold((0, -1), |(cnt, prev), i| {
-            (if i > prev { cnt + 1 } else { cnt }, i)
-        })
-        .0
-        - 1
+    increases(
+        input
+            .into_iter()
+            .tuple_windows()
+            .map(|(a, b, c)| a + b + c)
+            .collect(),
+    )
 }
 
 #[cfg(test)]
