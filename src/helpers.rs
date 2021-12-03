@@ -6,12 +6,12 @@ use std::{
 };
 
 pub fn std_parse<R: AsRef<str>, T: FromStr>(input: R) -> Result<Vec<T>, T::Err> {
-    Ok(input
+    input
         .as_ref()
         .lines()
         .map(|l| l.trim())
         .map(|i| i.parse::<T>())
-        .collect::<Result<Vec<_>, _>>()?)
+        .collect::<Result<Vec<_>, _>>()
 }
 
 pub fn read_input(filename: &str) -> Result<String> {

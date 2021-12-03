@@ -33,7 +33,7 @@ impl FromStr for Line {
 
 impl Debug for Line {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(format!("{}", self.0.iter().map(|i| i.to_string()).join("")).as_str())
+        f.write_str(self.0.iter().map(|i| i.to_string()).join("").as_str())
         //f.debug_tuple("Line").field(&self.0).finish()
     }
 }
@@ -56,7 +56,7 @@ impl From<Line> for u32 {
     fn from(line: Line) -> Self {
         let mut o = 0u32;
         for i in line.0 {
-            o = o << 1;
+            o <<= 1;
             o |= i;
         }
         o
@@ -96,7 +96,7 @@ fn get_o_c(lines: Vec<Line>) -> (u32, u32) {
         pos += 1;
     }
 
-    let mut c = lines.clone();
+    let mut c = lines;
     let mut pos = 0;
     while c.len() > 1 {
         let (_, epsilon) = get_g_e(c.clone());

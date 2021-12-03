@@ -44,7 +44,7 @@ impl FromStr for Direction {
             Some(("forward", i)) => Direction::Forward(i.parse()?),
             Some(("up", i)) => Direction::Up(i.parse()?),
             Some(("down", i)) => Direction::Down(i.parse()?),
-            _ => return Err(Error::msg(format!("Not Forward/Up or Down: {}", s)))?,
+            _ => return Err(Error::msg(format!("Not Forward/Up or Down: {}", s))),
         })
     }
 }
