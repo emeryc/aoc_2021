@@ -1,10 +1,10 @@
-use aoc::helpers::std_parse;
+use aoc::helpers::{read_input, std_parse};
 use eyre::{Error, Result};
 use std::str::FromStr;
 
 fn main() -> Result<()> {
-    let input = include_str!("../../days/02.txt");
-    let (h, d) = find_pos(std_parse(input)?);
+    let input = read_input(file!())?;
+    let (h, d) = find_pos(std_parse(&input)?);
     println!("part1: {}", h * d);
     let (h, d, _) = find_aim(std_parse(input)?);
     println!("part2: {}", h * d);

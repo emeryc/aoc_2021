@@ -1,11 +1,11 @@
-use aoc::helpers::std_parse;
+use aoc::helpers::{read_input, std_parse};
 use eyre::Result;
 use itertools::Itertools;
 
 fn main() -> Result<()> {
-    let input = include_str!("../../days/01.txt");
-    println!("increases: {}", increases(std_parse(input)?));
-    println!("window: {}", window(std_parse(input)?));
+    let input = read_input(file!())?;
+    println!("increases: {}", increases(std_parse(&input)?));
+    println!("window: {}", window(std_parse(&input)?));
 
     Ok(())
 }
