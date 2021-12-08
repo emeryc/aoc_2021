@@ -1,4 +1,4 @@
-use aoc::helpers::{read_input, std_parse};
+use aoc::helpers::read_input;
 use eyre::Result;
 
 fn main() -> Result<()> {
@@ -12,7 +12,7 @@ fn main() -> Result<()> {
 
 fn parse_ints(input: &str) -> Result<Vec<u64>> {
     input
-        .split(",")
+        .split(',')
         .map(|d| Ok(d.parse()?))
         .collect::<Result<_>>()
 }
