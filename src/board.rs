@@ -1,5 +1,29 @@
 use eyre::{Error, Result};
-use std::{fmt::Debug, str::FromStr};
+use itertools::Itertools;
+use std::{fmt::Debug, ops::AddAssign, str::FromStr};
+
+pub struct IntBoard<const X: usize, const Y: usize>(pub Board<u32, X, Y>);
+impl<const X: usize, const Y: usize> FromStr for IntBoard<X, Y> {
+    type Err = Error;
+
+    fn from_str(input: &str) -> Result<IntBoard<X, Y>> {
+        Ok(Self(Board::new(
+            input
+                .lines()
+                .map(|line| -> Result<[u32; X]> {
+                    line.trim()
+                        .chars()
+                        .map(|c| c.to_digit(10).unwrap())
+                        .collect::<Vec<_>>()
+                        .try_into()
+                        .map_err(|_v| Error::msg("Collect Failure"))
+                })
+                .collect::<Result<Vec<_>>>()?
+                .try_into()
+                .map_err(|_v| Error::msg("Collect Failure"))?,
+        )))
+    }
+}
 
 #[derive(Clone, Copy)]
 pub struct Board<T, const X: usize, const Y: usize>([[T; X]; Y]);
@@ -8,6 +32,19 @@ impl<T, const X: usize, const Y: usize> Board<T, X, Y> {
         Board(board)
     }
 }
+
+impl<T: Debug, const X: usize, const Y: usize> Debug for Board<T, X, Y> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for y in self.0.iter() {
+            for x in y.iter() {
+                x.fmt(f)?;
+            }
+            f.write_str("\n")?;
+        }
+        Ok(())
+    }
+}
+
 impl<T, const X: usize, const Y: usize> FromStr for Board<T, X, Y>
 where
     T: FromStr + Clone + Send + Sync + std::fmt::Debug,
@@ -49,6 +86,13 @@ impl<T, const X: usize, const Y: usize> Board<T, X, Y> {
         self.0[p.y][p.x] = v;
     }
 
+    pub fn incr(&mut self, p: &Point)
+    where
+        T: AddAssign<u32>,
+    {
+        self.0[p.y][p.x] += 1;
+    }
+
     pub fn find(&self, v: T) -> Option<Point>
     where
         T: PartialEq,
@@ -73,6 +117,13 @@ impl<T, const X: usize, const Y: usize> Board<T, X, Y> {
 
     pub fn iter<'a>(&'a self) -> Box<dyn Iterator<Item = &'a T> + 'a> {
         Box::new(self.0.iter().flat_map(|r| r.iter()))
+    }
+
+    pub fn points(&self) -> Vec<Point> {
+        (0..X)
+            .cartesian_product(0..Y)
+            .map(|(x, y)| Point { x, y })
+            .collect()
     }
 }
 
