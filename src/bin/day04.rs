@@ -15,7 +15,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn play_bingo_v1(plays: Vec<u32>, mut boards: Vec<Board<u32, 25>>) -> u32 {
+fn play_bingo_v1(plays: Vec<u32>, mut boards: Vec<Board<u32, 5, 5>>) -> u32 {
     for play in plays {
         for board in boards.iter_mut() {
             if let Some(pt) = board.find(play) {
@@ -29,12 +29,12 @@ fn play_bingo_v1(plays: Vec<u32>, mut boards: Vec<Board<u32, 25>>) -> u32 {
     unreachable!("This should never happen")
 }
 
-fn is_winner<const L: usize>(board: &Board<u32, L>, pt: &Point) -> bool {
+fn is_winner<const X: usize, const Y: usize>(board: &Board<u32, X, Y>, pt: &Point) -> bool {
     (board.row(pt.y).into_iter().sum::<u32>() == 0u32)
         || (board.col(pt.x).into_iter().sum::<u32>() == 0)
 }
 
-fn play_bingo_v2(plays: Vec<u32>, mut boards: Vec<Board<u32, 25>>) -> u32 {
+fn play_bingo_v2(plays: Vec<u32>, mut boards: Vec<Board<u32, 5, 5>>) -> u32 {
     for play in plays {
         let mut tboards = Vec::new();
         let len = boards.len();
@@ -55,7 +55,7 @@ fn play_bingo_v2(plays: Vec<u32>, mut boards: Vec<Board<u32, 25>>) -> u32 {
     unreachable!("This should never happen")
 }
 
-fn read_board_input(input: &str) -> Result<(Vec<u32>, Vec<Board<u32, 25>>)> {
+fn read_board_input(input: &str) -> Result<(Vec<u32>, Vec<Board<u32, 5, 5>>)> {
     let (plays, rest) = input
         .split_once("\n")
         .expect("Should be formatted correctly");
@@ -66,7 +66,7 @@ fn read_board_input(input: &str) -> Result<(Vec<u32>, Vec<Board<u32, 25>>)> {
         .collect::<Result<_>>()?;
     let boards = rest
         .split("\n\n")
-        .map(|b| b.parse::<Board<u32, 25>>())
+        .map(|b| b.parse::<Board<u32, 5, 5>>())
         .collect::<Result<_>>()?;
 
     Ok((plays, boards))
