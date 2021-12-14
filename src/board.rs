@@ -138,3 +138,18 @@ impl Debug for Point {
         f.write_str(format!("({}, {})", self.x, self.y).as_str())
     }
 }
+
+impl FromStr for Point {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (x, y) = s
+            .trim()
+            .split_once(',')
+            .ok_or_else(|| Error::msg("No comma"))?;
+        Ok(Point {
+            x: x.parse()?,
+            y: y.parse()?,
+        })
+    }
+}
