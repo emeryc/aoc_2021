@@ -27,7 +27,7 @@ fn part1(input: &[Display]) -> usize {
 }
 
 fn part2(input: &[Display]) -> usize {
-    input.iter().map(|d| solve_display(d)).sum()
+    input.iter().map(solve_display).sum()
 }
 
 fn solve_display(display: &Display) -> usize {

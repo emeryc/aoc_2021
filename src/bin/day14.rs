@@ -80,35 +80,6 @@ fn part2(template: &str, rules: &HashMap<(char, char), char>) -> u128 {
     }
 }
 
-fn descend(
-    a: char,
-    c: char,
-    rules: &HashMap<(char, char), char>,
-    cur: usize,
-    max: usize,
-    score: &mut HashMap<char, u64>,
-) {
-    if cur == max {
-        *score.entry(a).or_default() += 1;
-        return;
-    }
-    let b = rules[&(a, c)];
-    descend(a, b, rules, cur + 1, max, score);
-    descend(b, c, rules, cur + 1, max, score);
-}
-
-fn apply(template: String, rules: &HashMap<(char, char), char>) -> String {
-    template
-        .chars()
-        .tuple_windows()
-        .flat_map(|(a, b)| {
-            let insert = rules[&(a, b)];
-            [a, insert]
-        })
-        .collect::<String>()
-        + template.chars().last().unwrap().to_string().as_str()
-}
-
 struct Production {
     input: (char, char),
     out: char,
